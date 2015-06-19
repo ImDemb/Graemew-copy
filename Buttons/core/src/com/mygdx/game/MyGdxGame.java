@@ -24,6 +24,7 @@ public class MyGdxGame extends ApplicationAdapter {
     Vector2 platformPosition;
     float timer;
     Vector2 gravity;
+    Texture health;
     Vector2 playerVelocity;
     Rectangle playerBounds;
     Rectangle platformBounds;
@@ -59,6 +60,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Button = new Texture("rsz_onebutton.png");
         Secondbutton = new Texture("rsz_twobutton_2.png");
         platform = new Texture("platform.png");
+        health = new Texture("");
         platformBounds = new Rectangle();
         playerBounds = new Rectangle();
         bullets = new ArrayList<Bullet>();
@@ -104,7 +106,12 @@ public class MyGdxGame extends ApplicationAdapter {
         if (playerBounds.overlaps(platformBounds)) {
             playerVelocity.y = 0;
             gravity.set(0, 0);
-        } else {
+        }
+
+        if ()
+
+
+        else {
             gravity.set(0, -5              );
         }
 
@@ -163,6 +170,7 @@ public class MyGdxGame extends ApplicationAdapter {
         }
         //batch.draw(Player, playerPosition.x, playerPosition.y);
         batch.draw(right, 150, 25);
+        batch.draw(health, 500, 500);
         batch.draw(left, 25, 25);
         batch.draw(Button, 710, 25);
         batch.draw(Secondbutton, 825, 25);
