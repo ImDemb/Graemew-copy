@@ -15,11 +15,13 @@ import java.util.ArrayList;
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
     ArrayList<Bullet> bullets;
+    ArrayList<Enemy> enemies;
     Texture up, right, left, down;
     Texture Player;
     Texture platform;
     Texture Button;
     Texture Secondbutton;
+    Texture health;
     Vector2 playerPosition;
     Vector2 platformPosition;
     float timer;
@@ -59,6 +61,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Button = new Texture("rsz_onebutton.png");
         Secondbutton = new Texture("rsz_twobutton_2.png");
         platform = new Texture("platform.png");
+        health = new Texture("healthbar4.png");
         platformBounds = new Rectangle();
         playerBounds = new Rectangle();
         bullets = new ArrayList<Bullet>();
@@ -163,6 +166,7 @@ public class MyGdxGame extends ApplicationAdapter {
         }
         //batch.draw(Player, playerPosition.x, playerPosition.y);
         batch.draw(right, 150, 25);
+        batch.draw(health, 400, 200);
         batch.draw(left, 25, 25);
         batch.draw(Button, 710, 25);
         batch.draw(Secondbutton, 825, 25);
