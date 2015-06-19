@@ -32,6 +32,7 @@ import com.badlogic.gdx.math.Vector2;
         public void update() {
             position.x += speed * direction;
             bounds.set(position.x, position.y, BulletImage.getWidth(), BulletImage.getHeight());
+            active = true;
 
         }
 

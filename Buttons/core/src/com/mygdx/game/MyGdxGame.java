@@ -31,6 +31,8 @@ public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch SpriteBatch;
     Texture[] playerRun;
     Boolean isrunning = false;
+    int width;
+    int height;
 
 
     private TextureRegion[] regions = new TextureRegion[6];
@@ -43,6 +45,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
         batch = new SpriteBatch();
 
+        width = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight();
         gravity = new Vector2();
         playerVelocity = new Vector2();
         playerPosition = new Vector2();
@@ -94,6 +98,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
         for (Bullet bullet : bullets) {
             bullet.update();
+
         }
 
         if (playerBounds.overlaps(platformBounds)) {
@@ -120,10 +125,14 @@ public class MyGdxGame extends ApplicationAdapter {
             }
             System.out.println(timer);
 
-            if (X > 826 && X < 905 && Y < 864 && Y > 873 ) {
+            if (X > 826 && X < 905 && Y > 450 && Y < 500) {
                 bullets.add(new Bullet(playerPosition.x, playerPosition.y, 1, 10));
                 timer = 1;
                 System.out.println("b button pressed");
+            }
+
+            if (X > 735 && X < 800 && Y < 525 && Y > 425) {
+                playerVelocity.y = +200;
             }
 
         }
@@ -158,7 +167,9 @@ public class MyGdxGame extends ApplicationAdapter {
         batch.draw(Button, 710, 25);
         batch.draw(Secondbutton, 825, 25);
         for (Bullet bullet : bullets) {
-            batch.draw(bullet.BulletImage, bullet.position.x, bullet.position.y);
+            if (bullet.position.x < width) {
+                batch.draw(bullet.BulletImage, bullet.position.x, bullet.position.y);
+            }
         }
         batch.end();
     }
