@@ -15,23 +15,30 @@ import java.util.ArrayList;
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
     ArrayList<Bullet> bullets;
+
+    Animation koala;
     Texture up, right, left, down;
     Texture Player;
+    Texture Enemy;
     Texture platform;
     Texture Button;
     Texture Secondbutton;
+    Texture health;
+    Texture[] playerRun;
+
+    Vector2 enemyVelocity;
+    Vector2 enemyPosition;
     Vector2 playerPosition;
     Vector2 platformPosition;
-    float timer;
     Vector2 gravity;
-    Texture health;
     Vector2 playerVelocity;
+
+    Rectangle enemyBounds;
     Rectangle playerBounds;
     Rectangle platformBounds;
-    Animation koala;
-    SpriteBatch SpriteBatch;
-    Texture[] playerRun;
+
     Boolean isrunning = false;
+    float timer;
     int width;
     int height;
 
@@ -51,6 +58,9 @@ public class MyGdxGame extends ApplicationAdapter {
         gravity = new Vector2();
         playerVelocity = new Vector2();
         playerPosition = new Vector2();
+        enemyBounds = new Rectangle();
+        enemyPosition = new Vector2();
+        enemyVelocity = new Vector2();
         platformPosition = new Vector2();
         right = new Texture("buttonright.png");
         up = new Texture("buttonup.png");
@@ -60,7 +70,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Button = new Texture("rsz_onebutton.png");
         Secondbutton = new Texture("rsz_twobutton_2.png");
         platform = new Texture("platform.png");
-        health = new Texture("");
+        Enemy = new Texture("Enemy.png");
         platformBounds = new Rectangle();
         playerBounds = new Rectangle();
         bullets = new ArrayList<Bullet>();
@@ -108,11 +118,8 @@ public class MyGdxGame extends ApplicationAdapter {
             gravity.set(0, 0);
         }
 
-        if ()
-
-
-        else {
-            gravity.set(0, -5              );
+        if (enemyBounds.overlaps(playerBounds)) {
+            playerVelocity.x =-1;
         }
 
 
@@ -139,16 +146,15 @@ public class MyGdxGame extends ApplicationAdapter {
             }
 
             if (X > 735 && X < 800 && Y < 525 && Y > 425) {
-                playerVelocity.y = +200;
+                playerVelocity.y = 200;
             }
 
         }
         playerBounds.setX(playerPosition.x);
         playerBounds.setY(playerPosition.y);
 
-
-
     }
+
 
 
     @Override
@@ -163,14 +169,14 @@ public class MyGdxGame extends ApplicationAdapter {
         batch.draw(left, 25, 25);
         batch.draw(platform, platformPosition.x, platformPosition.y);
         if (isrunning) {
-
             batch.draw(koala.getKeyFrame(stateTime), playerPosition.x, playerPosition.y);
         } else {
             batch.draw(playerRun[6], playerPosition.x, playerPosition.y);
         }
         //batch.draw(Player, playerPosition.x, playerPosition.y);
         batch.draw(right, 150, 25);
-        batch.draw(health, 500, 500);
+        batch.draw(Enemy,500, 50 );
+        //batch.draw(health, 500, 500);
         batch.draw(left, 25, 25);
         batch.draw(Button, 710, 25);
         batch.draw(Secondbutton, 825, 25);
