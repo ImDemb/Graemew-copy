@@ -125,7 +125,7 @@ public class MyGdxGame extends ApplicationAdapter {
         else{
             gravity.set(0,-10);
         }
-        
+
         if (enemyBounds.overlaps(platformBounds)) {
             enemyVelocity.y = 0;
         }
