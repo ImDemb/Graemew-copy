@@ -14,8 +14,6 @@ import java.util.ArrayList;
 
 public class MyGdxGame extends ApplicationAdapter {
     Texture Player;
-    Vector2 playerVelocity;
-    Rectangle playerBounds;
     Vector2 playerPosition;
 
     Texture Enemy;
@@ -25,17 +23,20 @@ public class MyGdxGame extends ApplicationAdapter {
 
     Texture platform;
     Vector2 platformPosition;
-    Rectangle platformBounds;
 
     SpriteBatch batch;
     ArrayList<Bullet> bullets;
     Texture right, left;
     Texture Button;
     Texture Secondbutton;
-    Texture health;
     Vector2 gravity;
     float timer;
 
+    int jumpCount;
+    Texture health;
+    Vector2 playerVelocity;
+    Rectangle playerBounds;
+    Rectangle platformBounds;
     Animation koala;
     SpriteBatch SpriteBatch;
     Texture[] playerRun;
@@ -102,6 +103,7 @@ public class MyGdxGame extends ApplicationAdapter {
         playerVelocity.set(0, 0);
         enemyVelocity.set(0, 0);
         gravity.set(0, -10);
+        jumpCount = 0;
     }
 
     public void updategame() {
@@ -109,8 +111,9 @@ public class MyGdxGame extends ApplicationAdapter {
         float dt = Gdx.app.getGraphics().getDeltaTime();
         timer = timer - dt;
         playerVelocity.add(gravity);
-        playerPosition.mulAdd(playerVelocity, dt);
 
+
+        playerPosition.mulAdd(playerVelocity, dt);
         enemyVelocity.add(gravity);
         enemyPosition.mulAdd(enemyVelocity, dt);
 
@@ -121,6 +124,7 @@ public class MyGdxGame extends ApplicationAdapter {
         if (playerBounds.overlaps(platformBounds)) {
             playerVelocity.y = 0;
             gravity.set(0,0);
+            jumpCount = 0;
         }
         else{
             gravity.set(0,-10);
@@ -132,11 +136,11 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
 
-        if (Gdx.input.isTouched()) {
-            float X = Gdx.input.getX();
-            float Y = Gdx.input.getY();
+        for (int i=0; i<4; i++){
+        if (Gdx.input.isTouched(i)) {
+            float X = Gdx.input.getX(i);
+            float Y = Gdx.input.getY(i);
             System.out.println(X + " " + Y);
-
 
             if (X > 25 && X < 117 && Y < 525 && Y > 425) {
                 isrunning = true;
@@ -148,17 +152,18 @@ public class MyGdxGame extends ApplicationAdapter {
             }
             System.out.println(timer);
 
-            if (X > 826 && X < 905 && Y > 450 && Y < 500) {
+            if (X > 826 && X < 905 && Y > 450 && Y < 500 && timer <= 0) {
                 bullets.add(new Bullet(playerPosition.x, playerPosition.y, 1, 10));
                 timer = 1;
                 System.out.println("b button pressed");
             }
 
-            if (X > 735 && X < 800 && Y < 525 && Y > 425) {
-                playerVelocity.y = 200;
+            if (X > 735 && X < 800 && Y < 525 && Y > 425 && jumpCount < 1) {
+                jumpCount = jumpCount + 1;
+                playerVelocity.y = 400;
                 gravity.set(0, -10);
             }
-
+        }
         }
         playerBounds.setX(playerPosition.x);
         playerBounds.setY(playerPosition.y);
