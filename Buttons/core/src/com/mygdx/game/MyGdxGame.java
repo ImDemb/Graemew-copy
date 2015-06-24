@@ -31,7 +31,7 @@ public class MyGdxGame extends ApplicationAdapter {
     Texture Secondbutton;
     Vector2 gravity;
     float timer;
-
+    
     int jumpCount;
     Texture health;
     Vector2 playerVelocity;
@@ -63,12 +63,13 @@ public class MyGdxGame extends ApplicationAdapter {
         playerVelocity = new Vector2();
         playerPosition = new Vector2();
         platformPosition = new Vector2();
+
         right = new Texture("buttonright.png");
         left = new Texture("buttonleft.png");
         Player = new Texture("koalaidle.png");
         Button = new Texture("rsz_onebutton.png");
         Secondbutton = new Texture("rsz_twobutton_2.png");
-        platform = new Texture("platform.png");
+        platform = new Texture("platform.tmx");
         health = new Texture("healthbar4.png");
         Enemy = new Texture("gummybear.png");
         platformBounds = new Rectangle();
