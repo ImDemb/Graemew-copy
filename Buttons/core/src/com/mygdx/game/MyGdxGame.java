@@ -2,67 +2,55 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
 import java.util.ArrayList;
 
 public class MyGdxGame extends ApplicationAdapter {
-<<<<<<< HEAD
-    Texture Player;
-    Vector2 playerPosition;
-
-    Texture Enemy;
-    Vector2 enemyVelocity;
-    Rectangle enemyBounds;
-    Vector2 enemyPosition;
-
-=======
-    SpriteBatch batch;
-    ArrayList<Bullet> bullets;
 
     Animation koala;
-    Texture up, right, left, down;
     Texture Player;
-    Texture Enemy;
->>>>>>> origin/master
     Texture platform;
-    Vector2 platformPosition;
+    boolean movingForward = true;
+
+    Texture tileset,tileset2, tileset3;
+    TiledMapRenderer mapRenderer;
+    TiledMap map;
 
     SpriteBatch batch;
     ArrayList<Bullet> bullets;
-    Texture right, left;
-    Texture Button;
-    Texture Secondbutton;
-<<<<<<< HEAD
-    Vector2 gravity;
-    float timer;
-    
+    Texture right, left, Button, Secondbutton;
+    Rectangle rightbox, leftbox, buttonbox, seconbuttonbox;
+
     int jumpCount;
-    Texture health;
-=======
+    int buttonMove;
     Texture health;
     Texture[] playerRun;
 
-    Vector2 enemyVelocity;
-    Vector2 enemyPosition;
     Vector2 playerPosition;
     Vector2 platformPosition;
     Vector2 gravity;
-    Vector2 enemyGravity;
->>>>>>> origin/master
     Vector2 playerVelocity;
     Vector2 getX;
     Vector2 getY;
     Vector2 setLocation;
 
 
-    Rectangle enemyBounds;
+    OrthographicCamera cam;
     Rectangle playerBounds;
     Rectangle platformBounds;
 
@@ -70,63 +58,58 @@ public class MyGdxGame extends ApplicationAdapter {
     float timer;
     int width;
     int height;
-
-
-    private TextureRegion[] regions = new TextureRegion[6];
     TextureRegion currentFrame;
     float stateTime;
-
+    private TextureRegion[] regions = new TextureRegion[6];
 
     @Override
     public void create() {
-
         batch = new SpriteBatch();
-
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
         gravity = new Vector2();
-<<<<<<< HEAD
-        enemyVelocity = new Vector2();
-        enemyPosition = new Vector2();
-=======
-        enemyGravity = new Vector2();
->>>>>>> origin/master
+
         playerVelocity = new Vector2();
         playerPosition = new Vector2();
-        enemyBounds = new Rectangle();
-        enemyPosition = new Vector2();
-        enemyVelocity = new Vector2();
         platformPosition = new Vector2();
-<<<<<<< HEAD
 
-=======
+        tileset = new Texture("New Piskel (2) copy 2.png");
+        tileset2 = new Texture("platform3.png");
+        tileset3 = new Texture("tile-duke-example.png");
+        map = new TmxMapLoader().load("lyleiscool.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map);
+
         getX = new Vector2();
         getY = new Vector2();
         setLocation = new Vector2();
->>>>>>> origin/master
         right = new Texture("buttonright.png");
         left = new Texture("buttonleft.png");
         Player = new Texture("koalaidle.png");
         Button = new Texture("rsz_onebutton.png");
         Secondbutton = new Texture("rsz_twobutton_2.png");
-<<<<<<< HEAD
-        platform = new Texture("platform.tmx");
-        health = new Texture("healthbar4.png");
-        Enemy = new Texture("gummybear.png");
-=======
         platform = new Texture("platform.png");
-        Enemy = new Texture("Enemy.png");
->>>>>>> origin/master
+        health = new Texture("healthbar4.png");
+        platform = new Texture("platform.png");
         platformBounds = new Rectangle();
         playerBounds = new Rectangle();
-        enemyBounds = new Rectangle();
+        rightbox = new Rectangle();
+        rightbox.set(25, 425, right.getWidth(), right.getHeight());
+        leftbox = new Rectangle();
+        leftbox.set(150, 425, right.getWidth(), right.getHeight());
+        buttonbox = new Rectangle();
+        buttonbox.set(735, 425, Button.getWidth(), Button.getHeight());
+        seconbuttonbox = new Rectangle();
+        seconbuttonbox.set(826, 450, Secondbutton.getWidth(), Secondbutton.getHeight());
+
         bullets = new ArrayList<Bullet>();
-        playerPosition.set(400, 400);
-<<<<<<< HEAD
-        enemyPosition.set(400, 400);
-=======
-        enemyPosition.set(550,500);
->>>>>>> origin/master
+        playerPosition.set(350, 350);
+
+        cam = new OrthographicCamera();
+        cam.setToOrtho(false, width, height);
+
+        StartScreen.create();
+
+
         platformPosition.set(0, 0);
         playerRun = new Texture[7];
         playerRun[0] = new Texture("koalarunning2.png");
@@ -138,44 +121,34 @@ public class MyGdxGame extends ApplicationAdapter {
         playerRun[6] = new Texture("koalaidle.png");
         koala = new Animation(.1f, new TextureRegion(playerRun[0]), new TextureRegion(playerRun[1]), new TextureRegion(playerRun[2]), new TextureRegion(playerRun[3]), new TextureRegion(playerRun[4]), new TextureRegion(playerRun[5]));
         koala.setPlayMode(Animation.PlayMode.LOOP);
-        stateTime = 0.f;
+        stateTime = 0f;
 
         resetGame();
-
-
     }
 
 
     private void resetGame() {
+        playerPosition.set(400, 400);
+        buttonMove = 0;
         platformBounds.set(platformPosition.x, platformPosition.y, platform.getWidth(), platform.getHeight());
         playerBounds.set(playerPosition.x, playerPosition.y, Player.getWidth(), Player.getHeight());
-        enemyBounds.set(enemyPosition.x, enemyPosition.y, Enemy.getWidth(), Enemy.getHeight());
         playerVelocity.set(0, 0);
-        enemyVelocity.set(0, 0);
         gravity.set(0, -10);
-<<<<<<< HEAD
         jumpCount = 0;
-=======
-        enemyGravity.set(0,-10);
-        enemyVelocity.set(0,0);
 
->>>>>>> origin/master
     }
 
     public void updategame() {
+
+        if (StartScreen.atmenu) {
+            StartScreen.updategame();
+
+        } else {
         isrunning = false;
         float dt = Gdx.app.getGraphics().getDeltaTime();
         timer = timer - dt;
         playerVelocity.add(gravity);
-
-
         playerPosition.mulAdd(playerVelocity, dt);
-<<<<<<< HEAD
-        enemyVelocity.add(gravity);
-=======
-        enemyVelocity.add(enemyGravity);
->>>>>>> origin/master
-        enemyPosition.mulAdd(enemyVelocity, dt);
 
         for (Bullet bullet : bullets) {
             bullet.update();
@@ -183,136 +156,101 @@ public class MyGdxGame extends ApplicationAdapter {
 
         if (playerBounds.overlaps(platformBounds)) {
             playerVelocity.y = 0;
-<<<<<<< HEAD
-            gravity.set(0,0);
-            jumpCount = 0;
-        }
-        else{
-            gravity.set(0,-10);
-        }
-
-        if (enemyBounds.overlaps(platformBounds)) {
-            enemyVelocity.y = 0;
-=======
             gravity.set(0, 0);
+            jumpCount = 0;
+            System.out.println("GRAVITY");
         } else {
             gravity.set(0, -10);
         }
-        if (enemyBounds.overlaps(platformBounds)) {
-            enemyVelocity.y = 0;
-            enemyGravity.set (0,0);
-        } else {
-            enemyGravity.set(0,-10);
->>>>>>> origin/master
+
+
+            for (int i = 0; i < 4; i++) {
+                if (Gdx.input.isTouched(i)) {
+                    float X = Gdx.input.getX(i);
+                    float Y = Gdx.input.getY(i);
+                    System.out.println(X + " " + Y);
+
+
+                    if (rightbox.contains(X, Y)) {
+                        isrunning = true;
+                        playerPosition.x = playerPosition.x - 5;
+                        buttonMove -= 5;
+                        movingForward = false;
+                    }
+                    if (leftbox.contains(X, Y)) {
+                        isrunning = true;
+                        playerPosition.x = playerPosition.x + 5;
+                        buttonMove += 5;
+                        movingForward = true;
+                    }
+                    System.out.println(timer);
+
+                    if (seconbuttonbox.contains(X, Y) && timer <= 0) {
+                        bullets.add(new Bullet(playerPosition.x, playerPosition.y, 1, 10));
+                        timer = 1;
+                    }
+
+                    if (buttonbox.contains(X, Y) && jumpCount < 1) {
+                        jumpCount = jumpCount + 1;
+                        playerVelocity.y = 400;
+                        gravity.set(0, -10);
+                    }
+
+                    if (playerPosition.y < 0) {
+                        resetGame();
+                    }
+                }
+            }
+            playerBounds.setX(playerPosition.x);
+            playerBounds.setY(playerPosition.y);
+            cam.position.set(width - playerPosition.x, (height / 2), 0);
         }
-
-
-
-        for (int i=0; i<4; i++){
-        if (Gdx.input.isTouched(i)) {
-            float X = Gdx.input.getX(i);
-            float Y = Gdx.input.getY(i);
-            System.out.println(X + " " + Y);
-
-            if (X > 25 && X < 117 && Y < 525 && Y > 425) {
-                isrunning = true;
-                playerPosition.x = playerPosition.x - 5;
-            }
-            if (X > 150 && X < 242 && Y < 525 && Y > 425) {
-                isrunning = true;
-                playerPosition.x = playerPosition.x + 5;
-            }
-            System.out.println(timer);
-
-            if (X > 826 && X < 905 && Y > 450 && Y < 500 && timer <= 0) {
-                bullets.add(new Bullet(playerPosition.x, playerPosition.y, 1, 10));
-                timer = 1;
-                System.out.println("b button pressed");
-            }
-
-<<<<<<< HEAD
-            if (X > 735 && X < 800 && Y < 525 && Y > 425 && jumpCount < 1) {
-                jumpCount = jumpCount + 1;
-                playerVelocity.y = 400;
-                gravity.set(0, -10);
-=======
-            if (X > 735 && X < 800 && Y < 525 && Y > 425) {
-                playerVelocity.y = 200;
->>>>>>> origin/master
-            }
-        }
-        }
-        playerBounds.setX(playerPosition.x);
-        playerBounds.setY(playerPosition.y);
-
-<<<<<<< HEAD
-        enemyBounds.setX(enemyPosition.x);
-        enemyBounds.setY(enemyPosition.y);
-
-        System.out.println("gravity " + gravity.y);
-=======
     }
 
-   /* public void moveToPlayer(Player player) {
-        int deltaX = getX() - player.getX();
-        int deltaY = getY() - player.getY();
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            setLocation(getX() - 1, getY());
-        }
-        else if (deltaX < 0) {
-            setLocation(getX() + 1, getY());
-        }
->>>>>>> origin/master
+    public void drawGame() {
+        cam.position.set(playerPosition.x, (height / 2), 0);
+        cam.update();
+        mapRenderer.setView(cam);
+        mapRenderer.render();
 
-    else {
-        if (deltaY > 0) {
-            setLocation(getX(), getY() - 1);
-        }
-        else if (deltaY < 0) {
-            setLocation(getX(), getY() + 1);
-        }
-    }
-    }
-*/
-
-    @Override
-    public void render() {
-        updategame();
-
-        Gdx.gl.glClearColor(255, 255, 255, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stateTime += Gdx.graphics.getDeltaTime();
         batch.begin();
-        batch.draw(right, 150, 25);
-        batch.draw(left, 25, 25);
-        batch.draw(platform, platformPosition.x, platformPosition.y);
-        if (isrunning) {
-            batch.draw(koala.getKeyFrame(stateTime), playerPosition.x, playerPosition.y);
+
+        if (StartScreen.atmenu) {
+            StartScreen.render();
+
         } else {
-            batch.draw(playerRun[6], playerPosition.x, playerPosition.y);
-        }
-        batch.draw(Enemy, 400, 400);
-        batch.draw(right, 150, 25);
-<<<<<<< HEAD
-        batch.draw(health, 35, 475);
-=======
-        batch.draw(Enemy, enemyPosition.x, enemyPosition.y);
-        //batch.draw(health, 500, 500);
->>>>>>> origin/master
-        batch.draw(left, 25, 25);
-        batch.draw(Button, 710, 25);
-        batch.draw(Secondbutton, 825, 25);
-        for (Bullet bullet : bullets) {
-            if (bullet.position.x < width) {
-                batch.draw(bullet.BulletImage, bullet.position.x, bullet.position.y);
+            //batch.draw(platform, platformPosition.x, platformPosition.y);
+            if (isrunning) {
+                batch.draw(koala.getKeyFrame(stateTime), playerPosition.x, playerPosition.y);
+            } else {
+                batch.draw(playerRun[6], playerPosition.x, playerPosition.y);
+            }
+
+            batch.draw(right, 65 + buttonMove, 25);
+            batch.draw(health, -55 + buttonMove, 475);
+            batch.draw(left, -55 + buttonMove, 25);
+            batch.draw(Button, 650 + buttonMove, 25);
+            batch.draw(Secondbutton, 770 + buttonMove, 25);
+            for (Bullet bullet : bullets) {
+                if (bullet.position.x < cam.position.x + width) {
+                    batch.draw(bullet.BulletImage, bullet.position.x, bullet.position.y);
+                }
             }
         }
         batch.end();
+        batch.setProjectionMatrix(cam.combined);
     }
+
+    @Override
+    public void render() {
+        Gdx.gl.glClearColor(1,1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stateTime += Gdx.graphics.getDeltaTime();
+        updategame();
+        drawGame();
+
+    }
+
 }
 
-public class Enemy{
-
-        
-        }
 
