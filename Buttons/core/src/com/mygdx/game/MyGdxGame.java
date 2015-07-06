@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -18,27 +19,36 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
+
 import java.util.ArrayList;
 
 public class MyGdxGame extends ApplicationAdapter {
 
     Animation koala;
     Texture Player;
+    Texture sky;
     Texture platform;
     boolean movingForward = true;
 
-    Texture tileset,tileset2, tileset3;
+    Texture tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8;
     TiledMapRenderer mapRenderer;
     TiledMap map;
+    MapObjects objects, spikes;
+    MapLayer GroundObject,SpikesObjects;
 
     SpriteBatch batch;
     ArrayList<Bullet> bullets;
     Texture right, left, Button, Secondbutton;
     Rectangle rightbox, leftbox, buttonbox, seconbuttonbox;
+    int buttonUp;
 
     int jumpCount;
     int buttonMove;
-    Texture health;
+    Texture healthbar;
+    Texture healthbar3;
+    Texture healthbar2;
     Texture[] playerRun;
 
     Vector2 playerPosition;
@@ -48,7 +58,7 @@ public class MyGdxGame extends ApplicationAdapter {
     Vector2 getX;
     Vector2 getY;
     Vector2 setLocation;
-
+    int health;
 
     OrthographicCamera cam;
     Rectangle playerBounds;
@@ -69,26 +79,41 @@ public class MyGdxGame extends ApplicationAdapter {
         height = Gdx.graphics.getHeight();
         gravity = new Vector2();
 
+        health = 3;
+
         playerVelocity = new Vector2();
         playerPosition = new Vector2();
         platformPosition = new Vector2();
 
-        tileset = new Texture("New Piskel (2) copy 2.png");
-        tileset2 = new Texture("platform3.png");
-        tileset3 = new Texture("tile-duke-example.png");
+        tileset = new Texture("tile-duke-example.png");
+        tileset2 = new Texture("spike2.png");
+        tileset3 = new Texture("map1.png");
+        tileset4 = new Texture("tree1.png");
+        tileset5 = new Texture("vines1.png");
+        tileset6 = new Texture("floatingplatform.png");
+        tileset7 = new Texture("New Piskel (2) copy.png");
+        tileset8 = new Texture("New Piskel (3) copy.png");
         map = new TmxMapLoader().load("lyleiscool.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
+
+        GroundObject = map.getLayers().get("GroundObject");
+        objects = GroundObject.getObjects();
+        SpikesObjects = map.getLayers().get("SpikesObject");
+        spikes = SpikesObjects.getObjects();
 
         getX = new Vector2();
         getY = new Vector2();
         setLocation = new Vector2();
+        sky = new Texture("sky.png");
         right = new Texture("buttonright.png");
         left = new Texture("buttonleft.png");
         Player = new Texture("koalaidle.png");
         Button = new Texture("rsz_onebutton.png");
         Secondbutton = new Texture("rsz_twobutton_2.png");
         platform = new Texture("platform.png");
-        health = new Texture("healthbar4.png");
+        healthbar = new Texture("healthbar4.png");
+        healthbar3 = new Texture ("healthbar3.png");
+        healthbar2 = new Texture ("healthbar2.png");
         platform = new Texture("platform.png");
         platformBounds = new Rectangle();
         playerBounds = new Rectangle();
@@ -100,6 +125,7 @@ public class MyGdxGame extends ApplicationAdapter {
         buttonbox.set(735, 425, Button.getWidth(), Button.getHeight());
         seconbuttonbox = new Rectangle();
         seconbuttonbox.set(826, 450, Secondbutton.getWidth(), Secondbutton.getHeight());
+
 
         bullets = new ArrayList<Bullet>();
         playerPosition.set(350, 350);
@@ -122,7 +148,6 @@ public class MyGdxGame extends ApplicationAdapter {
         koala = new Animation(.1f, new TextureRegion(playerRun[0]), new TextureRegion(playerRun[1]), new TextureRegion(playerRun[2]), new TextureRegion(playerRun[3]), new TextureRegion(playerRun[4]), new TextureRegion(playerRun[5]));
         koala.setPlayMode(Animation.PlayMode.LOOP);
         stateTime = 0f;
-
         resetGame();
     }
 
@@ -135,8 +160,21 @@ public class MyGdxGame extends ApplicationAdapter {
         playerVelocity.set(0, 0);
         gravity.set(0, -10);
         jumpCount = 0;
+        health = 3;
+    }
+
+    public void tiledUpdate(){
+
+//        MapLayer collisionLayer = (TiledMapTileLayer)map.getLayers().get("Ground");
+//        MapObjects objects = collisionLayer.get("SpikesObject").getObjects();
+
+        int tileWidth = 16;
+        int tileHeight = 16;
+
+    // there are several other types, Rectangle is probably the most common one
 
     }
+
 
     public void updategame() {
 
@@ -154,14 +192,25 @@ public class MyGdxGame extends ApplicationAdapter {
             bullet.update();
         }
 
-        if (playerBounds.overlaps(platformBounds)) {
-            playerVelocity.y = 0;
-            gravity.set(0, 0);
-            jumpCount = 0;
-            System.out.println("GRAVITY");
-        } else {
-            gravity.set(0, -10);
-        }
+//        checks collision with ground
+            for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+                Rectangle rectangle = rectangleObject.getRectangle();
+                if (rectangle.contains(playerBounds)) {
+                    playerVelocity.y = 0;
+                    platformPosition.y = rectangle.y + rectangle.getHeight() + 1;
+                    gravity.set(0, 0);
+                    jumpCount = 0;
+                    System.out.println("GRAVITY");
+                }
+            }
+
+            //Checks collision with spikes
+            for (RectangleMapObject rectangleObject : spikes.getByType(RectangleMapObject.class)) {
+                Rectangle rectangle = rectangleObject.getRectangle();
+                if (Intersector.overlaps(rectangle, playerBounds)){
+                  health = health -1;
+                }
+            }
 
 
             for (int i = 0; i < 4; i++) {
@@ -196,9 +245,10 @@ public class MyGdxGame extends ApplicationAdapter {
                         gravity.set(0, -10);
                     }
 
-                    if (playerPosition.y < 0) {
-                        resetGame();
-                    }
+                }
+
+                if (playerPosition.y < 0) {
+                    resetGame();
                 }
             }
             playerBounds.setX(playerPosition.x);
@@ -208,37 +258,51 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     public void drawGame() {
-        cam.position.set(playerPosition.x, (height / 2), 0);
+        cam.position.set(playerPosition.x, playerPosition.y, 0);
         cam.update();
+        batch.setProjectionMatrix(cam.combined);
         mapRenderer.setView(cam);
         mapRenderer.render();
 
         batch.begin();
+        //batch.draw(sky, cam.position.x - sky.getWidth() / 2, 0);
 
         if (StartScreen.atmenu) {
             StartScreen.render();
 
         } else {
-            //batch.draw(platform, platformPosition.x, platformPosition.y);
             if (isrunning) {
                 batch.draw(koala.getKeyFrame(stateTime), playerPosition.x, playerPosition.y);
             } else {
                 batch.draw(playerRun[6], playerPosition.x, playerPosition.y);
             }
 
-            batch.draw(right, 65 + buttonMove, 25);
-            batch.draw(health, -55 + buttonMove, 475);
-            batch.draw(left, -55 + buttonMove, 25);
-            batch.draw(Button, 650 + buttonMove, 25);
-            batch.draw(Secondbutton, 770 + buttonMove, 25);
+
+            batch.draw(right, 65 + buttonMove, cam.position.y - (height/2));
+            batch.draw(left, -55 + buttonMove, cam.position.y - (height / 2));
+            if (health == 3){
+                System.out.println("I'm Fine");
+                batch.draw(healthbar, -55 + buttonMove, cam.position.y + (height / 2) - 40);
+            } else if (health == 2){
+                System.out.println("i've been better...");
+
+                batch.draw(healthbar3, -55 + buttonMove, cam.position.y + (height/2) -40);
+            } else if (health == 1){
+                System.out.println("I'm fucked...");
+                batch.draw(healthbar2,-55 + buttonMove, cam.position.y + (height/2) -40);
+            }
+            batch.draw(Button, 650 + buttonMove, cam.position.y - (height / 2));
+            batch.draw(Secondbutton, 770 + buttonMove, cam.position.y - (height / 2));
             for (Bullet bullet : bullets) {
                 if (bullet.position.x < cam.position.x + width) {
                     batch.draw(bullet.BulletImage, bullet.position.x, bullet.position.y);
                 }
             }
         }
+
+
         batch.end();
-        batch.setProjectionMatrix(cam.combined);
+
     }
 
     @Override

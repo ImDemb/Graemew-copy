@@ -1,29 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="15" tilewidth="32" tileheight="32" nextobjectid="18">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="200" height="20" tilewidth="32" tileheight="32" nextobjectid="63">
  <tileset firstgid="1" name="tile-duke-example" tilewidth="48" tileheight="48" margin="1">
   <image source="tile-duke-example.png" width="432" height="383"/>
  </tileset>
- <tileset firstgid="57" name="New Piskel (2) copy 2" tilewidth="64" tileheight="64">
-  <image source="New Piskel (2) copy 2.png" width="128" height="64"/>
+ <tileset firstgid="57" name="map1" tilewidth="68" tileheight="65" spacing="4" margin="4">
+  <image source="map1.png" trans="fffaf5" width="1008" height="72"/>
  </tileset>
- <tileset firstgid="59" name="platform3" tilewidth="32" tileheight="40">
-  <image source="platform3.png" width="220" height="49"/>
+ <tileset firstgid="71" name="New Piskel (3) copy" tilewidth="40" tileheight="57" spacing="4" margin="4">
+  <image source="New Piskel (3) copy.png" trans="fffaf5" width="184" height="61"/>
  </tileset>
- <layer name="Tile Layer 1" width="100" height="15">
+ <tileset firstgid="75" name="floatingplatform" tilewidth="72" tileheight="32">
+  <image source="floatingplatform.png" trans="fffaf5" width="72" height="32"/>
+ </tileset>
+ <tileset firstgid="76" name="vines1" tilewidth="64" tileheight="60" margin="8">
+  <image source="vines1.png" trans="fffaf5" width="216" height="72"/>
+ </tileset>
+ <tileset firstgid="79" name="New Piskel (2) copy" tilewidth="64" tileheight="64">
+  <image source="New Piskel (2) copy.png" trans="fffaf5" width="128" height="64"/>
+ </tileset>
+ <tileset firstgid="81" name="spike2" tilewidth="32" tileheight="16">
+  <image source="spike2.png" trans="fffaf5" width="32" height="16"/>
+ </tileset>
+ <tileset firstgid="82" name="tree1" tilewidth="82" tileheight="122">
+  <image source="tree1.png" trans="fffaf5" width="82" height="122"/>
+ </tileset>
+ <layer name="Vines" width="200" height="20">
   <data encoding="base64" compression="zlib">
-   eJztlNEKgCAMRf2trP7/t/IlkDGmk2wi58AlJRfX3VFKAAAAAACwK0f19AjWIUcb2JB3xvOgYA5afyNzqP+H2rreW2dGNMpZdBXdjhp5D9njngz+yEX60daempVmTfpo7T3+Z2PNSzLeefq/Qh69vlr3i/SpnbNqWt+LyuNLzeIBZq8sRQ==
+   eJzt2MEJgDAMBdCAS7iIencyR3M0FW/Siohalfegl0BJLh9CIgAAAAAA4LuaiGFbawvMAV9Slx4AXq4OOQFImffscVvrDvxrTvZL7fqLKvGu1mZ6w9vdkQf4C/lgT196gMLkA/LkA/Jy+ZAbWD1xwwIAuNMENDAEcw==
   </data>
  </layer>
- <objectgroup name="Object Layer 1">
-  <object id="3" x="5.24934" y="320.21" width="1018.37" height="157.48"/>
-  <object id="4" x="1214.35" y="545.932"/>
-  <object id="5" x="1315.84" y="754.156" height="59.4926"/>
-  <object id="6" x="1819.46" y="477.69" width="1.24234"/>
-  <object id="7" x="1820.75" y="475.188" width="0.944882" height="2.48469"/>
-  <object id="9" x="1821.68" y="474.453" width="1.5923" height="3.2371"/>
+ <layer name="Ground" width="200" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztmFtuhDAMRb2dLqHzaIHf/rD/1XRQsca9gxMHCM4gH8kKU0Limlw7hCgIgiAIgiAIgiAI2ubH24HgtHwV9rvO7WcFX4KgNXpvB4LAwP1hN/rLzx098/RFtFcwa+5P0c92yXU8Ed3cavG8wH3++x2e5zaoTw82Jkz222NemsdtkRrfFhhrjOcg2lTfqL314VzVQzsx0CtSJ0v3c3wo4/Hc3yvGfDdya34yizZCH/WRukjVDGlEzzqylVFpz4ysmVvsSH1M5yHyjGSyG+n7wyu97s0nOnF9U+bqxHNbzmHW1H72iX1YqhsWUu+H55Ax4phoORDriBa7M4B7ygGM4LoFfWj1C/fcE0Pmmdya86yROV9Lc5h1Dm3OpRjk3j3nFJm/MLd19D+38T3tHODI82KMNeoDtaLF/Wh9aL6sNct4Hvqw+GXRg0UHuXqxJi6Yt0r2I6mcdRQpfRD87sW1pz6s63lv/XjpY22/pfW2RhuylePydYk+chrBMb2/dUvqB+uC6LWmnF0f71g/RhirRBe4DveqH0v7s6X3qe3tvPXBNaLltTPmu1Sh1fqRY2s+0XyzrFeLxtFXrHf4vJc+ZIs+YYwJ+kX92J8a31l7xiJ3toH3LDps7T1o+rD+L9xG/ag3n+f+IoVVH6k6xKTu45rzPgtCvyxaP1ofnvnyKLTvA+/aUZLPa9RAb33ktODt8y8AOvhw
+  </data>
+ </layer>
+ <layer name="Spikes" width="200" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt2M0OwiAMwHHey9M8GZ0m8/0fRj2QkKYwXFgK9P9LdvATKKN0hAAAAAD4c7fuAAAg66a89z6hncf3Wk/43xH8Yrwll1QTb/bS+S3WHQAKYg6SefwpXsfPX43b97w+ZIw1aby97rUjuVp3wIne46zV4CX/1uej145LKOf+vfHJujveDzU5FXPZQvlZrBdHc5b1+Eq57IxzBY/SvKXVeTKvaXV4rj6U90/8nlWubF3HausjF89L47aPsl7TnpTy7iKumt+MRI7P4nl778xAywdyfbQ+d9gzy/yjXm9znuuP9XqeQW9zDR3zBACwYrEHse8BAAD49gEnChvS
+  </data>
+ </layer>
+ <layer name="Tile Layer 4" width="200" height="20" opacity="0">
+  <data encoding="base64" compression="zlib">
+   eJzt2MEKgzAMAFB/a8dtlzFv/v/HiLBDGUgdtEmd70EOHmpDY0rrNAEAABBtKYK6OTsBQiyVGMktO4FO3tkJUPUMnOv+CX4TWSPy6A3YN3p/9LpbPILHtXD07PdKmLOVVrnX6uQc/b++z3a15yPv6CHrv0nmHlY68z51VtZp3yh9UXJPjZNR/6vMybX55uJZcwAAAABgswIiSQyi
+  </data>
+ </layer>
+ <objectgroup name="SpikesObject" visible="0">
+  <object id="55" x="2528.49" y="352.266" width="126.12" height="31.3125"/>
+  <object id="56" x="2943.38" y="289.641" width="63.4948" height="29.5729"/>
+  <object id="57" x="737.584" y="353.136" width="123.51" height="30.4427"/>
+  <object id="58" x="3971.47" y="384.448" width="121.771" height="31.3125"/>
+  <object id="59" x="5024.79" y="159.172" width="94.8073" height="32.1823"/>
+ </objectgroup>
+ <objectgroup name="GroundObject" visible="0">
+  <object id="3" x="0" y="320.953" width="637.288" height="156.737"/>
   <object id="10" x="1858.27" y="320.21" width="124.234" height="159.23"/>
   <object id="11" x="1986" y="253.718" width="64.7419" height="225.722"/>
-  <object id="14" x="2047.24" y="188.976" width="479.44" height="286.964"/>
-  <object id="15" x="1443.57" y="346.457" width="89.2388" height="34.9956"/>
+  <object id="14" x="2047.24" y="188.976" width="482.115" height="289.41"/>
+  <object id="15" x="1440" y="346.457" width="73.3333" height="34.9956"/>
+  <object id="18" x="639.554" y="319.361" width="95.642" height="159.681"/>
+  <object id="19" x="737.691" y="385.895" width="125.582" height="91.4383"/>
+  <object id="20" x="864.105" y="319.361" width="158.849" height="159.681"/>
+  <object id="21" x="2529.94" y="385.063" width="124.75" height="93.9787"/>
+  <object id="29" x="2657.19" y="321.856" width="349.301" height="158.017"/>
+  <object id="31" x="3008.98" y="128" width="61.5436" height="352"/>
+  <object id="34" x="3072.19" y="192" width="63.81" height="286.667"/>
+  <object id="36" x="3136.23" y="258.667" width="62.3752" height="221.207"/>
+  <object id="37" x="3201.93" y="320" width="60.7119" height="159.873"/>
+  <object id="38" x="3328.34" y="128.077" width="190.452" height="63.2069"/>
+  <object id="39" x="3424.82" y="353.333" width="478.21" height="125.709"/>
+  <object id="41" x="3903.86" y="351.796" width="64.0386" height="127.246"/>
+  <object id="42" x="3970.39" y="416.667" width="124.75" height="62.3752"/>
+  <object id="45" x="4096.81" y="352.628" width="61.5436" height="127.246"/>
+  <object id="48" x="4960" y="193.964" width="641.333" height="286.785"/>
+  <object id="50" x="4289.33" y="251.01" width="73.3333" height="34.0353"/>
+  <object id="51" x="4577.75" y="123.378" width="71.5833" height="34.0353"/>
+  <object id="54" x="2881.8" y="273.333" width="43.564" height="52.4561"/>
+  <object id="62" x="2974.67" y="158.667" width="94.6667" height="30.6667"/>
  </objectgroup>
 </map>
