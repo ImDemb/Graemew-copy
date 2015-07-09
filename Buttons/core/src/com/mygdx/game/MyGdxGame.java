@@ -73,7 +73,6 @@ public class MyGdxGame extends ApplicationAdapter {
     TextureRegion playerFrame;
 
     Vector2 playerPosition;
-    Vector2 platformPosition;
     Vector2 gravity;
     Vector2 playerVelocity;
     Vector2 getX;
@@ -118,7 +117,6 @@ public class MyGdxGame extends ApplicationAdapter {
         dead = false;
         playerVelocity = new Vector2();
         playerPosition = new Vector2();
-        platformPosition = new Vector2();
 
         bg = new Sprite(new Texture("sky.png"));
         bg.scale(2.5f);
@@ -188,7 +186,6 @@ public class MyGdxGame extends ApplicationAdapter {
         hurt = new Animation(.1f, new TextureRegion(koalared[0]), new TextureRegion(koalared[1]));
         hurt.setPlayMode(Animation.PlayMode.LOOP);
 
-        platformPosition.set(0, 0);
         playerRun = new TextureRegion[7];
         playerRun[0] = new TextureRegion(new Texture("koalarunning2.png"));
         playerRun[1] = new TextureRegion(new Texture("koalarunning3.png"));
@@ -305,7 +302,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 Rectangle rectangle = rectangleObject.getRectangle();
                 if (Intersector.overlaps(playerBounds, rectangle)) {
                     playerVelocity.y = 0;
-                    platformPosition.y = rectangle.y + rectangle.getHeight() ;
+                    playerPosition.y = rectangle.y + rectangle.getHeight() + 1;
                     gravity.set(0, 0);
                     jumpCount = 0;
                     System.out.println("GRAVITY");
@@ -317,9 +314,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 Rectangle rectangle = rectangleObject.getRectangle();
                 if (Intersector.overlaps(enemy.enemyBounds,rectangle)) {
                     enemy.enemyVelocity.y = 0;
-                    enemy.enemyPosition.y = rectangle.y + rectangle.getHeight() + 1 ;
-                    gravity.set(0, 0);
-                    System.out.println("GRAVITY");
+                    enemy.enemyPosition.y = rectangle.y + rectangle.getHeight() + 1;
                 }
             }
 
