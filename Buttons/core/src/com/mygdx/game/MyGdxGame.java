@@ -176,7 +176,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
         bullets = new ArrayList<Bullet>();
-        playerPosition.set(350, 350);
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, width, height);
@@ -249,13 +248,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
         CheckCollision();
 
-
-        playerBounds.setX(playerPosition.x);
-        playerBounds.setY(playerPosition.y);
-        enemyBounds.setX(enemy.enemyPosition.x);
-        enemyBounds.setY(enemy.enemyPosition.y);
-
-
         if (health <= 0)
         {
             dead = true;
@@ -264,7 +256,6 @@ public class MyGdxGame extends ApplicationAdapter {
             isrunning = false;
             float dt = Gdx.app.getGraphics().getDeltaTime();
             timer = timer - dt;
-            playerVelocity.add(gravity);
 
             for (Bullet bullet : bullets) {
                 bullet.update();
@@ -294,7 +285,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
                 if (buttonbox.contains(X, Y) && jumpCount < 1) {
                     jumpCount = jumpCount + 1;
-                    playerVelocity.y = 50;
+                    playerVelocity.y = 500;
                     gravity.set(0, -10);
                     playerVelocity.add(gravity);
                     playerPosition.mulAdd(playerVelocity,dt);
@@ -304,16 +295,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
             //checks collision with ground
-            gravity.set(0, 0);
-            Rectangle closest = null;
-            float closestX = 10000000000f;
-            boolean left = false;
-
-            playerVelocity.add(gravity);
-            playerPosition.mulAdd(playerVelocity, dt);
-            playerBounds.setX(playerPosition.x);
-            playerBounds.setY(playerPosition.y);
-
+            gravity.set(0, -10);
+            jumpCount = 1;
 
 //        checks PLAYER collision with ground
             for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
@@ -324,10 +307,7 @@ public class MyGdxGame extends ApplicationAdapter {
                     gravity.set(0, 0);
                     jumpCount = 0;
                     System.out.println("GRAVITY");
-                } else {
-            gravity.set(0, -10);
-            jumpCount = 1;
-        }
+                }
             }
 
 //        checks ENEMY collision with ground
@@ -341,12 +321,13 @@ public class MyGdxGame extends ApplicationAdapter {
                 }
             }
 
+            playerVelocity.add(gravity);
+            playerPosition.mulAdd(playerVelocity, dt);
+            playerBounds.setX(playerPosition.x);
+            playerBounds.setY(playerPosition.y);
 
-
-
-
-
-
+            enemyBounds.setX(enemy.enemyPosition.x);
+            enemyBounds.setY(enemy.enemyPosition.y);
 
             //Checks collision with spikes
             for (RectangleMapObject rectangleObject : spikes.getByType(RectangleMapObject.class)) {
