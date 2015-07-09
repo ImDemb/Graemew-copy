@@ -25,7 +25,7 @@ public class StartScreen {
         startScreen = new Texture("startScreen.png");
         Playbutton = new Texture("play_button.png");
         sky = new Texture("sky.png");
-        platform1 = new Texture("platform copy.png");
+        platform1 = new Texture("platform1.png");
         clouds = new Texture("cloud.png");
         height = Gdx.graphics.getHeight() / 2;
         width = Gdx.graphics.getWidth() / 2;
