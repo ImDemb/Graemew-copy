@@ -262,34 +262,36 @@ public class MyGdxGame extends ApplicationAdapter {
             }
 
 
-            if (Gdx.input.isTouched()) {
-                float X = Gdx.input.getX();
-                float Y = Gdx.input.getY();
+            for (int i = 0; i < 4; i++) {
+                if (Gdx.input.isTouched(i)) {
+                    float X = Gdx.input.getX(i);
+                    float Y = Gdx.input.getY(i);
 
-                if (rightbox.contains(X, Y)) {
-                    isrunning = true;
-                    playerPosition.x = playerPosition.x - PLAYER_SPEED;
-                    movingForward = false;
-                }
-                if (leftbox.contains(X, Y)) {
-                    isrunning = true;
-                    playerPosition.x = playerPosition.x + PLAYER_SPEED;
-                    movingForward = true;
-                }
+                    if (rightbox.contains(X, Y)) {
+                        isrunning = true;
+                        playerPosition.x = playerPosition.x - PLAYER_SPEED;
+                        movingForward = false;
+                    }
+                    if (leftbox.contains(X, Y)) {
+                        isrunning = true;
+                        playerPosition.x = playerPosition.x + PLAYER_SPEED;
+                        movingForward = true;
+                    }
 
-                if (seconbuttonbox.contains(X, Y) && timer <= 0) {
-                    bullets.add(new Bullet(playerPosition.x, playerPosition.y, 1, 10));
-                    timer = 1;
-                    shot.play(100);
-                }
+                    if (seconbuttonbox.contains(X, Y) && timer <= 0) {
+                        bullets.add(new Bullet(playerPosition.x, playerPosition.y, 1, 10));
+                        timer = 1;
+                        shot.play(100);
+                    }
 
-                if (buttonbox.contains(X, Y) && jumpCount < 1) {
-                    jumpCount = jumpCount + 1;
-                    playerVelocity.y = 500;
-                    gravity.set(0, -10);
-                    playerVelocity.add(gravity);
-                    playerPosition.mulAdd(playerVelocity,dt);
-                    System.out.println("JUMP HAPPENED");
+                    if (buttonbox.contains(X, Y) && jumpCount < 1) {
+                        jumpCount = jumpCount + 1;
+                        playerVelocity.y = 500;
+                        gravity.set(0, -10);
+                        playerVelocity.add(gravity);
+                        playerPosition.mulAdd(playerVelocity,dt);
+                        System.out.println("JUMP HAPPENED");
+                    }
                 }
             }
 
