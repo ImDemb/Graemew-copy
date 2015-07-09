@@ -359,47 +359,11 @@ public class MyGdxGame extends ApplicationAdapter {
                 }
             }
 
-//            for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
-//                Rectangle rectangle = rectangleObject.getRectangle();
-//                if (rectangle.x > playerPosition.x && Math.abs(rectangle.x - playerPosition.x) < closestX && movingForward) {
-//                    closestX = rectangle.x - playerPosition.x;
-//                    closest = rectangle;
-//                    left = true;
-//                } else if (rectangle.x + rectangle.getWidth() < playerPosition.x && Math.abs(rectangle.x + rectangle.getWidth() - playerPosition.x) < closestX && !movingForward) {
-//                    closestX = rectangle.x + rectangle.getWidth() - playerPosition.x;
-//                    closest = rectangle;
-//                    left = false;
-//                }
-//                if (Intersector.overlaps(rectangle, playerBounds)) {
-//                    if (playerBounds.x >= rectangle.x && playerBounds.x <= (rectangle.x + rectangle.getWidth())) {
-//                        if (Math.abs(rectangle.y + rectangle.getHeight() - playerPosition.y) < 10) {
-//                            playerPosition.y = rectangle.y + rectangle.getHeight();
-//                        } else {
-//                            if (Math.abs(rectangle.x - playerPosition.x) <= Math.abs(rectangle.x + rectangle.getWidth() - playerPosition.x)) {
-//                                playerPosition.x = rectangle.x;
-//                            } else {
-////                                playerPosition.x = rectangle.x + rectangle.getWidth();
-//                            }
-//                        }
-//                    }
-//                    gravity.set(0, 0);
-//                    jumpCount = 0;
-//                    System.out.println("GRAVITY");
-                }
-
-
-//            if (closest != null && closest.y + closest.getHeight() > playerPosition.y) {
-//                if (Math.abs(closestX) < 10 && left && movingForward) {
-//                    playerPosition.x = closest.x;
-//                } else if (Math.abs(closestX) < 10 && !left && !movingForward) {
-//                    playerPosition.x = closest.x + closest.getWidth();
-//                }
-//            }
-
             if (playerPosition.y < 0) {
                 resetGame();
             }
         }
+    }
 
 
 
@@ -430,15 +394,6 @@ public class MyGdxGame extends ApplicationAdapter {
             } else {
                 playerFrame = playerRun[6];
             }
-
-//            for (RectangleMapObject rectangleObject : spikes.getByType(RectangleMapObject.class)) {
-//                Rectangle rectangle = rectangleObject.getRectangle();
-//                if (Intersector.overlaps(rectangle, playerBounds)) {
-//                    if (Math.floor(stateTime * 3) > Math.floor(lastStateTime * 3)) {
-//                        health = health - 1f;
-//                    }
-//                    playerFrame = hurt.getKeyFrame(stateTime);
-//                }
 
             for (Bullet bullet : bullets) {
                 if (bullet.position.x < cam.position.x + width) {
@@ -487,7 +442,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
         @Override
         public void render () {
-            enemy.updategame(platformBounds);
             Gdx.gl.glClearColor(1, 1, 1, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             lastStateTime = stateTime;
