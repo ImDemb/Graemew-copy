@@ -286,7 +286,7 @@ public class MyGdxGame extends ApplicationAdapter {
                     if (seconbuttonbox.contains(X, Y) && timer <= 0) {
                         bullets.add(new Bullet(playerPosition.x, playerPosition.y + Player.getHeight()/2, 1, 10));
                         //bullets.add(new Bullet(playerPosition.x, playerPosition.y, 1, 10));
-                        timer = 1;
+                        timer = .5f;
                         shot.play(100);
                     }
 
@@ -424,15 +424,16 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
 
-        @Override
-        public void render () {
-            Gdx.gl.glClearColor(1, 1, 1, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            lastStateTime = stateTime;
-            stateTime += Gdx.graphics.getDeltaTime();
+    @Override
+    public void render () {
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        lastStateTime = stateTime;
+        stateTime += Gdx.graphics.getDeltaTime();
 
-            updategame();
-            drawGame();
+        updategame();
+        drawGame();
+
         }
     }
 
