@@ -1,3 +1,4 @@
+
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -47,7 +48,6 @@ public class MyGdxGame extends ApplicationAdapter {
     Texture Player;
     Texture sky;
     Texture youdead;
-    Texture platform;
     boolean movingForward = true;
 
     Texture tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8;
@@ -73,7 +73,6 @@ public class MyGdxGame extends ApplicationAdapter {
     TextureRegion playerFrame;
 
     Vector2 playerPosition;
-    Vector2 platformPosition;
     Vector2 gravity;
     Vector2 playerVelocity;
     Vector2 getX;
@@ -82,6 +81,7 @@ public class MyGdxGame extends ApplicationAdapter {
     float health;
     boolean dead;
     Sound shot;
+    Music song;
 
     OrthographicCamera cam;
     Rectangle playerBounds;
@@ -107,7 +107,10 @@ public class MyGdxGame extends ApplicationAdapter {
         enemyBounds = new Rectangle();
         enemy.create();
         IDMATRIX = new Matrix4();
+
         shot = Gdx.audio.newSound(Gdx.files.internal("gunshot.wav"));
+        song = Gdx.audio.newMusic(Gdx.files.internal("song.mp3"));
+
         batch = new SpriteBatch();
         absoluteBatch = new SpriteBatch();
         width = Gdx.graphics.getWidth();
@@ -118,7 +121,6 @@ public class MyGdxGame extends ApplicationAdapter {
         dead = false;
         playerVelocity = new Vector2();
         playerPosition = new Vector2();
-        platformPosition = new Vector2();
 
         bg = new Sprite(new Texture("sky.png"));
         bg.scale(2.5f);
@@ -158,7 +160,6 @@ public class MyGdxGame extends ApplicationAdapter {
         Player = new Texture("koalaidle.png");
         Button = new Texture("rsz_onebutton.png");
         Secondbutton = new Texture("rsz_twobutton_2.png");
-        platform = new Texture("platform.png");
         healthbar = new Texture("healthbar4.png");
         healthbar3 = new Texture("healthbar3.png");
         healthbar2 = new Texture("healthbar2.png");
@@ -176,7 +177,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
         bullets = new ArrayList<Bullet>();
-        playerPosition.set(350, 350);
 
         cam = new OrthographicCamera();
         cam.setToOrtho(false, width, height);
@@ -189,7 +189,6 @@ public class MyGdxGame extends ApplicationAdapter {
         hurt = new Animation(.1f, new TextureRegion(koalared[0]), new TextureRegion(koalared[1]));
         hurt.setPlayMode(Animation.PlayMode.LOOP);
 
-        platformPosition.set(0, 0);
         playerRun = new TextureRegion[7];
         playerRun[0] = new TextureRegion(new Texture("koalarunning2.png"));
         playerRun[1] = new TextureRegion(new Texture("koalarunning3.png"));
@@ -217,11 +216,16 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     public void CheckCollision() {
-        if (bulletBounds.overlaps(enemyBounds)) {
-            enemy.health = enemy.health - 1;
-        }
-        if (enemy.health == 0) {
-            enemy.isDead = true;
+        System.out.println("enemyhealth= " + enemy.health);
+        System.out.println("bulletbounds= " + bulletBounds);
+        System.out.println("enemybounds= " + enemyBounds);
+        for (Bullet bullet : bullets) {
+            if (bullet.bounds.overlaps(enemyBounds)) {
+                enemy.health = enemy.health - 1;
+            }
+            if (enemy.health == 0) {
+                enemy.isDead = true;
+            }
         }
     }
 
@@ -229,105 +233,85 @@ public class MyGdxGame extends ApplicationAdapter {
     public void updategame() {
         dt = Gdx.graphics.getDeltaTime();
 
-        if (StartScreen.atmenu)
-
-        {
+        if (StartScreen.atmenu) {
             StartScreen.updategame();
+        } else {
+            song.setVolume(.5f);
+            song.play();
+            song.isLooping();
+            enemy.updategame(platformBounds);
+            if ((playerPosition.x + 200) > enemy.enemyPosition.x && enemy.enemyPosition.x < playerPosition.x) {
+                enemy.enemyPosition.x = enemy.enemyPosition.x + ENEMY_SPEED;
+            }
 
-        } else
+            if (playerPosition.x - 200 < enemy.enemyPosition.x && enemy.enemyPosition.x > playerPosition.x) {
+                enemy.enemyPosition.x = enemy.enemyPosition.x - ENEMY_SPEED;
+            }
 
-        {
+            CheckCollision();
 
-        enemy.updategame(platformBounds);
-        if ((playerPosition.x + 200) > enemy.enemyPosition.x && enemy.enemyPosition.x < playerPosition.x) {
-            enemy.enemyPosition.x = enemy.enemyPosition.x + ENEMY_SPEED;
-        }
-
-        if (playerPosition.x - 200 < enemy.enemyPosition.x && enemy.enemyPosition.x > playerPosition.x) {
-            enemy.enemyPosition.x = enemy.enemyPosition.x - ENEMY_SPEED;
-        }
-
-        CheckCollision();
-
-
-        playerBounds.setX(playerPosition.x);
-        playerBounds.setY(playerPosition.y);
-        enemyBounds.setX(enemy.enemyPosition.x);
-        enemyBounds.setY(enemy.enemyPosition.y);
-
-
-        if (health <= 0)
-        {
-            dead = true;
-        }
+            if (health <= 0)
+            {
+                dead = true;
+            }
 
             isrunning = false;
             float dt = Gdx.app.getGraphics().getDeltaTime();
             timer = timer - dt;
-            playerVelocity.add(gravity);
 
             for (Bullet bullet : bullets) {
                 bullet.update();
             }
 
 
-            if (Gdx.input.isTouched()) {
-                float X = Gdx.input.getX();
-                float Y = Gdx.input.getY();
+            for (int i = 0; i < 4; i++) {
+                if (Gdx.input.isTouched(i)) {
+                    float X = Gdx.input.getX(i);
+                    float Y = Gdx.input.getY(i);
 
-                if (rightbox.contains(X, Y)) {
-                    isrunning = true;
-                    playerPosition.x = playerPosition.x - PLAYER_SPEED;
-                    movingForward = false;
-                }
-                if (leftbox.contains(X, Y)) {
-                    isrunning = true;
-                    playerPosition.x = playerPosition.x + PLAYER_SPEED;
-                    movingForward = true;
-                }
+                    if (rightbox.contains(X, Y)) {
+                        isrunning = true;
+                        playerPosition.x = playerPosition.x - PLAYER_SPEED;
+                        movingForward = false;
+                    }
+                    if (leftbox.contains(X, Y)) {
+                        isrunning = true;
+                        playerPosition.x = playerPosition.x + PLAYER_SPEED;
+                        movingForward = true;
+                    }
 
-                if (seconbuttonbox.contains(X, Y) && timer <= 0) {
-                    bullets.add(new Bullet(playerPosition.x, playerPosition.y, 1, 10));
-                    timer = 1;
-                    shot.play(100);
-                }
+                    if (seconbuttonbox.contains(X, Y) && timer <= 0) {
+                        bullets.add(new Bullet(playerPosition.x, playerPosition.y + Player.getHeight()/2, 1, 10));
+                        timer = 1;
+                        shot.play(100);
+                    }
 
-                if (buttonbox.contains(X, Y) && jumpCount < 1) {
-                    jumpCount = jumpCount + 1;
-                    playerVelocity.y = 50;
-                    gravity.set(0, -10);
-                    playerVelocity.add(gravity);
-                    playerPosition.mulAdd(playerVelocity,dt);
-                    System.out.println("JUMP HAPPENED");
+                    if (buttonbox.contains(X, Y) && jumpCount < 1) {
+                        jumpCount = jumpCount + 1;
+                        playerVelocity.y = 500;
+                        gravity.set(0, -10);
+                        playerVelocity.add(gravity);
+                        playerPosition.mulAdd(playerVelocity,dt);
+                        System.out.println("JUMP HAPPENED");
+                    }
                 }
             }
 
 
             //checks collision with ground
-            gravity.set(0, 0);
-            Rectangle closest = null;
-            float closestX = 10000000000f;
-            boolean left = false;
-
-            playerVelocity.add(gravity);
-            playerPosition.mulAdd(playerVelocity, dt);
-            playerBounds.setX(playerPosition.x);
-            playerBounds.setY(playerPosition.y);
-
+            gravity.set(0, -10);
+            jumpCount = 1;
 
 //        checks PLAYER collision with ground
             for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
                 Rectangle rectangle = rectangleObject.getRectangle();
                 if (Intersector.overlaps(playerBounds, rectangle)) {
                     playerVelocity.y = 0;
-                    platformPosition.y = rectangle.y + rectangle.getHeight() ;
+                    playerPosition.y = rectangle.y + rectangle.getHeight() + 1;
                     gravity.set(0, 0);
                     jumpCount = 0;
                     System.out.println("GRAVITY");
-                } else {
-            gravity.set(0, -10);
-            jumpCount = 1;
-        }
+                }
             }
 
 //        checks ENEMY collision with ground
@@ -335,18 +319,17 @@ public class MyGdxGame extends ApplicationAdapter {
                 Rectangle rectangle = rectangleObject.getRectangle();
                 if (Intersector.overlaps(enemy.enemyBounds,rectangle)) {
                     enemy.enemyVelocity.y = 0;
-                    enemy.enemyPosition.y = rectangle.y + rectangle.getHeight() + 1 ;
-                    gravity.set(0, 0);
-                    System.out.println("GRAVITY");
+                    enemy.enemyPosition.y = rectangle.y + rectangle.getHeight() + 1;
                 }
             }
 
+            playerVelocity.add(gravity);
+            playerPosition.mulAdd(playerVelocity, dt);
+            playerBounds.setX(playerPosition.x);
+            playerBounds.setY(playerPosition.y);
 
-
-
-
-
-
+            enemyBounds.setX(enemy.enemyPosition.x);
+            enemyBounds.setY(enemy.enemyPosition.y);
 
             //Checks collision with spikes
             for (RectangleMapObject rectangleObject : spikes.getByType(RectangleMapObject.class)) {
@@ -359,47 +342,12 @@ public class MyGdxGame extends ApplicationAdapter {
                 }
             }
 
-//            for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
-//                Rectangle rectangle = rectangleObject.getRectangle();
-//                if (rectangle.x > playerPosition.x && Math.abs(rectangle.x - playerPosition.x) < closestX && movingForward) {
-//                    closestX = rectangle.x - playerPosition.x;
-//                    closest = rectangle;
-//                    left = true;
-//                } else if (rectangle.x + rectangle.getWidth() < playerPosition.x && Math.abs(rectangle.x + rectangle.getWidth() - playerPosition.x) < closestX && !movingForward) {
-//                    closestX = rectangle.x + rectangle.getWidth() - playerPosition.x;
-//                    closest = rectangle;
-//                    left = false;
-//                }
-//                if (Intersector.overlaps(rectangle, playerBounds)) {
-//                    if (playerBounds.x >= rectangle.x && playerBounds.x <= (rectangle.x + rectangle.getWidth())) {
-//                        if (Math.abs(rectangle.y + rectangle.getHeight() - playerPosition.y) < 10) {
-//                            playerPosition.y = rectangle.y + rectangle.getHeight();
-//                        } else {
-//                            if (Math.abs(rectangle.x - playerPosition.x) <= Math.abs(rectangle.x + rectangle.getWidth() - playerPosition.x)) {
-//                                playerPosition.x = rectangle.x;
-//                            } else {
-////                                playerPosition.x = rectangle.x + rectangle.getWidth();
-//                            }
-//                        }
-//                    }
-//                    gravity.set(0, 0);
-//                    jumpCount = 0;
-//                    System.out.println("GRAVITY");
-                }
-
-
-//            if (closest != null && closest.y + closest.getHeight() > playerPosition.y) {
-//                if (Math.abs(closestX) < 10 && left && movingForward) {
-//                    playerPosition.x = closest.x;
-//                } else if (Math.abs(closestX) < 10 && !left && !movingForward) {
-//                    playerPosition.x = closest.x + closest.getWidth();
-//                }
-//            }
-
             if (playerPosition.y < 0) {
                 resetGame();
+                dead = true;
             }
         }
+    }
 
 
 
@@ -431,24 +379,10 @@ public class MyGdxGame extends ApplicationAdapter {
                 playerFrame = playerRun[6];
             }
 
-//            for (RectangleMapObject rectangleObject : spikes.getByType(RectangleMapObject.class)) {
-//                Rectangle rectangle = rectangleObject.getRectangle();
-//                if (Intersector.overlaps(rectangle, playerBounds)) {
-//                    if (Math.floor(stateTime * 3) > Math.floor(lastStateTime * 3)) {
-//                        health = health - 1f;
-//                    }
-//                    playerFrame = hurt.getKeyFrame(stateTime);
-//                }
-
             for (Bullet bullet : bullets) {
                 if (bullet.position.x < cam.position.x + width) {
                     batch.draw(bullet.BulletImage, bullet.position.x, bullet.position.y);
                 }
-            }
-
-
-            if (dead = true) {
-                batch.draw(youdead, 300, 300);
             }
 
             if (movingForward && playerFrame.isFlipX() || !movingForward && !playerFrame.isFlipX()) {
@@ -485,16 +419,15 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
 
-        @Override
-        public void render () {
-            enemy.updategame(platformBounds);
-            Gdx.gl.glClearColor(1, 1, 1, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            lastStateTime = stateTime;
-            stateTime += Gdx.graphics.getDeltaTime();
+    @Override
+    public void render () {
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        lastStateTime = stateTime;
+        stateTime += Gdx.graphics.getDeltaTime();
 
-            updategame();
-            drawGame();
-        }
+        updategame();
+        drawGame();
     }
+}
 

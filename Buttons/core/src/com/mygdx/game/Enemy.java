@@ -31,12 +31,12 @@ public class Enemy {
         isDead = false;
         health = 3;
         enemyGravity = new Vector2();
-        enemyGravity.set(0, -10);
+        enemyGravity.set(0, -100);
         BadGuy = new Texture("gummybear.png");
         enemyPosition = new Vector2();
         enemyVelocity = new Vector2();
         enemyVelocity.set(0,0);
-        enemyPosition.set(550, 500);
+        enemyPosition.set(550, 300);
         enemyBounds = new Rectangle();
     }
 
