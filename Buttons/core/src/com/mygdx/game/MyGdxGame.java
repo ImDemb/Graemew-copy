@@ -105,7 +105,7 @@ public class MyGdxGame extends ApplicationAdapter {
         enemyVelocity = new Vector2();
         enemyPosition = new Vector2();
         enemyBounds = new Rectangle();
-        enemy.create();
+        enemy.create(1000,100);
         IDMATRIX = new Matrix4();
 
         shot = Gdx.audio.newSound(Gdx.files.internal("gunshot.wav"));
@@ -225,6 +225,9 @@ public class MyGdxGame extends ApplicationAdapter {
             }
             if (enemy.health == 0) {
                 enemy.isDead = true;
+                enemy=new Enemy();
+
+                enemy.create(playerPosition.x+700, playerPosition.y);
             }
         }
     }
@@ -281,11 +284,8 @@ public class MyGdxGame extends ApplicationAdapter {
                     }
 
                     if (seconbuttonbox.contains(X, Y) && timer <= 0) {
-<<<<<<< HEAD
                         bullets.add(new Bullet(playerPosition.x, playerPosition.y + Player.getHeight()/2, 1, 10));
-=======
-                        bullets.add(new Bullet(playerPosition.x, playerPosition.y, 1, 10));
->>>>>>> origin/master
+                        //bullets.add(new Bullet(playerPosition.x, playerPosition.y, 1, 10));
                         timer = 1;
                         shot.play(100);
                     }
@@ -398,6 +398,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
             if (!enemy.isDead) {
                 enemy.draw(batch);
+
             }
             batch.end();
 
@@ -423,17 +424,6 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
 
-<<<<<<< HEAD
-    @Override
-    public void render () {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        lastStateTime = stateTime;
-        stateTime += Gdx.graphics.getDeltaTime();
-
-        updategame();
-        drawGame();
-=======
         @Override
         public void render () {
             Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -444,7 +434,6 @@ public class MyGdxGame extends ApplicationAdapter {
             updategame();
             drawGame();
         }
->>>>>>> origin/master
     }
-}
+
 

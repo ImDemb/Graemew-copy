@@ -26,7 +26,7 @@ public class Enemy {
     Rectangle enemyBounds;
 
 
-    public void create() {
+    public void create(float x,float y) {
 
         isDead = false;
         health = 3;
@@ -36,7 +36,7 @@ public class Enemy {
         enemyPosition = new Vector2();
         enemyVelocity = new Vector2();
         enemyVelocity.set(0,0);
-        enemyPosition.set(550, 300);
+        enemyPosition.set(x, y);
         enemyBounds = new Rectangle();
     }
 
